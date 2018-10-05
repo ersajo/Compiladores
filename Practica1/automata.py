@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from anytree import Node, RenderTree
+class MyNode(Node):
+    separator = '-'
 
 class Automata:
     def __init__(self, ):
         self.estados = list()
         self.sigma = list()
-        self.inicial = ''
+        self.inicial = 0
         self.finales = list()
         self.transiciones = list()
-        self.Nivel = 0
+        self.nivel = 0
+        self.raiz = MyNode(self.inicial)
+        self.errores = list()
 
     def setEstados(self, estados):
         for estado in estados.split(','):
@@ -45,7 +50,7 @@ class Automata:
         return self.transiciones
 
     def getNivel(self,):
-        return self.Nivel
+        return self.nivel
 
     def fillTransicion(self,):
         aux = list()
@@ -71,3 +76,37 @@ class Automata:
     def printTransiciones(self,):
         for transicion in self.transiciones:
             print("{}({})={}".format(transicion[0], transicion[1], transicion[2]))
+
+    def validar(self, estado, cad, nodo):
+        if cad == '':
+            if estado in self.finales:
+                print("Cadena valida: {}".format(str(nodo).strip('MyNode(').strip(')')))
+            else:
+                print("!Cadena invalida!", estado)
+        elif cad[0] in self.sigma:
+            siguientes = self.siguientes(estado, cad[0])
+            for sig in siguientes:
+                hijo = MyNode(sig, parent=nodo)
+                self.validar(sig, cad[1:], hijo)
+        else:
+            self.validar(estado, cad[1:], nodo)
+
+    def siguientes(self, estado, caracter):
+        out = list()
+        for transicion in self.transiciones:
+            if transicion[0] == estado and transicion[1] == caracter:
+                out.append(transicion[2])
+        return out
+
+    def getRaiz(self,):
+        return self.raiz
+
+    def resetNivel(self,):
+        self.nivel = 0
+
+    def stripData(self, cad):
+        for char in cad:
+            if char not in self.sigma:
+                print("Warning: {} -> {}".format(char, self.nivel))
+            else:
+                self.nivel += 1

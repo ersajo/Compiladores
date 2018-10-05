@@ -16,7 +16,7 @@ for line in automataFile.readlines():
 
 automataFile.close()
 
-print("\n"*2)
+print("")
 print("*"*10, "Entrada", "*"*10)
 print("Nivel:", aut.getNivel())
 print("Estados:", aut.getEstados())
@@ -25,16 +25,22 @@ print("Estado Incial:", aut.getInicial())
 print("Estados Finales:", aut.getFinales())
 print("Transiciones:")
 aut.printTransiciones()
+print("*"*10, "Entrada", "*"*10)
 
 aut.fillTransicion()
 
-print("\n"*2)
+print("\n")
 print("*"*10, "Automata completo", "*"*10)
 print("Transiciones:")
 aut.printTransiciones()
 
-print("\n"*2)
 print("*"*10, "Automata completo", "*"*10)
+print("\n")
 
-cad = input("Introduce una cadena para evaluar>>")
-print(cad)
+while True:
+    cad = input("Introduce una cadena para evaluar>>")
+    if cad == "exit":
+        exit()
+    aut.stripData(cad)
+    aut.validar(aut.getInicial(), cad, aut.getRaiz())
+    aut.resetNivel()
