@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from anytree import Node, RenderTree
-class MyNode(Node):
-    separator = '-'
+
+class NodoAutomata(Node):
+    separator = ' -> '
+
+class NodoError(Node):
+    separator = ','
 
 class Automata:
     def __init__(self, ):
@@ -11,8 +15,8 @@ class Automata:
         self.inicial = 0
         self.finales = list()
         self.transiciones = list()
-        self.nivel = 0
-        self.raiz = MyNode(self.inicial)
+        self.raiz = NodoAutomata('')
+        self.errores = NodoError('')
         self.errores = list()
 
     def setEstados(self, estados):
@@ -24,7 +28,7 @@ class Automata:
 
     def setSigma(self, alfabeto):
         for caracter in alfabeto[:-1].split(','):
-            self.sigma.append(caracter)
+            self.sigma.append(str(caracter))
 
     def getSigma(self,):
         return self.sigma
@@ -48,9 +52,6 @@ class Automata:
 
     def getTransiciones(self,):
         return self.transiciones
-
-    def getNivel(self,):
-        return self.nivel
 
     def fillTransicion(self,):
         aux = list()
@@ -77,19 +78,26 @@ class Automata:
         for transicion in self.transiciones:
             print("{}({})={}".format(transicion[0], transicion[1], transicion[2]))
 
-    def validar(self, estado, cad, nodo):
+    def validar(self, estado, cad, nodoAut, nodoError):
         if cad == '':
             if estado in self.finales:
-                print("Cadena valida: {}".format(str(nodo).strip('MyNode(').strip(')')))
+                if str(nodoError) != "NodoError(',')":
+                    print("Cadena valida con error:\n{} -> {}".format(str(nodoAut).strip('NodoAutomata(')[10:-2],estado))
+                    print("Errores:\n{}\n".format(str(nodoError).strip('NodoError()')[3:-1]))
+                else:
+                    print("Cadena valida sin error:\n{}\n".format(str(nodoAut).strip('NodoAutomata(')[2:-2]))
             else:
                 print("!Cadena invalida!", estado)
         elif cad[0] in self.sigma:
             siguientes = self.siguientes(estado, cad[0])
             for sig in siguientes:
-                hijo = MyNode(sig, parent=nodo)
-                self.validar(sig, cad[1:], hijo)
+                text = "{}({})".format(estado, cad[0])
+                hijo = NodoAutomata(text, parent=nodoAut)
+                self.validar(sig, cad[1:], hijo, nodoError)
         else:
-            self.validar(estado, cad[1:], nodo)
+            text = "{}({})".format(estado, cad[0])
+            error = NodoError(text, parent=nodoError)
+            self.validar(estado, cad[1:], nodoAut, error)
 
     def siguientes(self, estado, caracter):
         out = list()
@@ -101,12 +109,15 @@ class Automata:
     def getRaiz(self,):
         return self.raiz
 
-    def resetNivel(self,):
-        self.nivel = 0
+    def reset(self, char):
+        del self.raiz, self.errores
+        cad = "{}({})".format(self.inicial, char)
+        self.raiz = NodoAutomata(cad)
+        self.errores = NodoError('')
 
-    def stripData(self, cad):
-        for char in cad:
-            if char not in self.sigma:
-                print("Warning: {} -> {}".format(char, self.nivel))
-            else:
-                self.nivel += 1
+    def getError(self,):
+        return self.errores
+
+    def printTree(self,):
+        print(RenderTree(self.raiz))
+        print(RenderTree(self.errores))

@@ -1,6 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+***Ejemplos de salidas para los caminos validos***
+
+camino 1:
+0(a) -> 0(b) -> 0(a) -> 0(b) -> 0
+errores:
+0(@), 0(*)
+
+camino 2:
+0(a) -> 0(b) -> 0(a) -> 1(b) -> 2
+errores:
+1(@), 2(*)
+"""
+
 from automata import *
 
 aut = Automata()
@@ -18,7 +32,6 @@ automataFile.close()
 
 print("")
 print("*"*10, "Entrada", "*"*10)
-print("Nivel:", aut.getNivel())
 print("Estados:", aut.getEstados())
 print("Sigma:", aut.getSigma())
 print("Estado Incial:", aut.getInicial())
@@ -41,6 +54,7 @@ while True:
     cad = input("Introduce una cadena para evaluar>>")
     if cad == "exit":
         exit()
-    aut.stripData(cad)
-    aut.validar(aut.getInicial(), cad, aut.getRaiz())
-    aut.resetNivel()
+    aut.reset(cad[0])
+    aut.validar(aut.getInicial(), cad, aut.getRaiz(), aut.getError())
+    #aut.printTree()
+    print("*"*40)
