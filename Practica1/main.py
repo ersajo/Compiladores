@@ -19,7 +19,7 @@ from automata import *
 
 aut = Automata()
 
-automataFile = open("ejemplo.txt", "r")
+automataFile = open("4.txt", "r")
 
 aut.setEstados(automataFile.readline())
 aut.setSigma(automataFile.readline())
