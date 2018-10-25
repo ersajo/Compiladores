@@ -80,6 +80,11 @@ class Automata:
 
     def validar(self, estado, cad, nodoAut, nodoError):
         if cad == '':
+            epsilon = self.epsilon(estado)
+            for sig in epsilon:
+                text = "{}({})".format(estado, 'E')
+                hijo = NodoAutomata(text, parent=nodoAut)
+                self.validar(sig, cad, hijo, nodoError)
             if estado in self.finales:
                 if str(nodoError) != "NodoError(',')":
                     print("Cadena valida con error:\n{} -> {}".format(str(nodoAut).strip('NodoAutomata(')[10:-2],estado))
@@ -88,13 +93,19 @@ class Automata:
                     print("Cadena valida sin error:\n{} -> {}\n".format(str(nodoAut).strip('NodoAutomata(')[10:-2], estado))
             else:
                 print("!Cadena invalida!")
+        elif cad[0] == 'E':
+            self.validar(estado, cad[1:], nodoAut, nodoError)
         elif cad[0] in self.sigma:
             siguientes = self.siguientes(estado, cad[0])
-            epsilon = self.epsilon()
             for sig in siguientes:
                 text = "{}({})".format(estado, cad[0])
                 hijo = NodoAutomata(text, parent=nodoAut)
                 self.validar(sig, cad[1:], hijo, nodoError)
+            epsilon = self.epsilon(estado)
+            for sig in epsilon:
+                text = "{}({})".format(estado, 'E')
+                hijo = NodoAutomata(text, parent=nodoAut)
+                self.validar(sig, cad, hijo, nodoError)
         else:
             text = "{}({})".format(estado, cad[0])
             error = NodoError(text, parent=nodoError)
