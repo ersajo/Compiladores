@@ -85,11 +85,12 @@ class Automata:
                     print("Cadena valida con error:\n{} -> {}".format(str(nodoAut).strip('NodoAutomata(')[10:-2],estado))
                     print("Errores:\n{}\n".format(str(nodoError).strip('NodoError()')[3:-1]))
                 else:
-                    print("Cadena valida sin error:\n{}\n".format(str(nodoAut).strip('NodoAutomata(')[2:-2]))
+                    print("Cadena valida sin error:\n{} -> {}\n".format(str(nodoAut).strip('NodoAutomata(')[10:-2], estado))
             else:
-                print("!Cadena invalida!", estado)
+                print("!Cadena invalida!")
         elif cad[0] in self.sigma:
             siguientes = self.siguientes(estado, cad[0])
+            epsilon = self.epsilon()
             for sig in siguientes:
                 text = "{}({})".format(estado, cad[0])
                 hijo = NodoAutomata(text, parent=nodoAut)
@@ -103,6 +104,13 @@ class Automata:
         out = list()
         for transicion in self.transiciones:
             if transicion[0] == estado and transicion[1] == caracter:
+                out.append(transicion[2])
+        return out
+
+    def epsilon(self, estado):
+        out = list()
+        for transicion in self.transiciones:
+            if transicion[0] == estado and transicion[1] == 'E':
                 out.append(transicion[2])
         return out
 
