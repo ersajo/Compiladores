@@ -1,0 +1,7 @@
+Operaciones con enteros y decimales
+
+E + E = E
+E + D = D
+D + D = D
+
+Concatenacion de cadenas

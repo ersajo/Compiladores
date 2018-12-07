@@ -1,0 +1,9 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=6115DAA1
+eax=00000061 ebx=00000001 ecx=00000061 edx=00000061 esi=00000000 edi=00000061
+ebp=0062C468 esp=0062C464 program=C:\cygwin\home\libra\Compiladores\revisionBison\a.exe, pid 11896, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+0062C468  6115DAA1 (00000061, 0062C528, 004058BC, 00000001)
+0062C59C  6117A6DF (2003C388, 00000000, 610B56E0, 20000008)
+End of stack trace
