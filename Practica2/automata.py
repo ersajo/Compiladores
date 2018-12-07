@@ -92,9 +92,13 @@ class Automata:
                 else:
                     print("Cadena valida sin error:\n{} -> {}\n".format(str(nodoAut).strip('NodoAutomata(')[10:-2], estado))
             else:
+<<<<<<< HEAD
+                #print("!Cadena invalida!")
+=======
                 print("!Cadena invalida!")
         elif cad[0] == 'E':
             self.validar(estado, cad[1:], nodoAut, nodoError)
+>>>>>>> 05422fccd88000a9c016445f2e566988007f5b1f
         elif cad[0] in self.sigma:
             siguientes = self.siguientes(estado, cad[0])
             for sig in siguientes:
